@@ -1,0 +1,8 @@
+We are looking for a Backend / Software Engineer Intern / Junior to join our distributed platform team.
+Requirements:
+- Strong experience with C#, .NET Core / ASP.NET Core or Go.
+- Familiarity with Cloud platforms (Azure or AWS) and asynchronous messaging (RabbitMQ, Kafka, or Event Hubs).
+- Solid knowledge of relational databases like SQL Server or PostgreSQL.
+- Experience with Unit Testing (xUnit/NUnit) and Clean Architecture / Domain-Driven Design (DDD).
+- Good understanding of Docker, CI/CD pipelines, and Linux environment.
+- Bachelor's degree in Computer Science or related field in progress.

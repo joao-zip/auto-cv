@@ -1,0 +1,157 @@
+personal:
+  name: 'João Pedro Martins Oliveira'
+  email: 'oliveira.joaop@proton.me'
+  phone: '+55 (12) 99669-1514'
+  location:
+    pt: 'São José dos Campos, SP'
+    en: 'São José dos Campos, Brazil'
+  links:
+    - name: 'LinkedIn'
+      url: 'https://www.linkedin.com/in/joao-zip'
+      display: 'linkedin.com/in/joao-zip'
+    - name: 'GitHub'
+      url: 'https://github.com/joao-zip'
+      display: 'github.com/joao-zip'
+    - name: 'Site'
+      url: 'https://joao-zip.github.io'
+      display: 'joao-zip.github.io'
+
+education:
+  institution: 'Universidade Federal de São Paulo (UNIFESP)'
+  degree:
+    pt: 'Bacharelado em Ciência da Computação'
+    en: 'Bachelor of Science in Computer Science'
+  period:
+    pt: 'Previsão de conclusão: Jul/2027'
+    en: 'Expected Graduation: Jul 2027'
+  location:
+    pt: 'São José dos Campos, SP'
+    en: 'São José dos Campos, Brazil'
+  coursework:
+    pt: 'Engenharia de Software, Banco de Dados, Inteligência Artificial, Inferência e Análise de Regressão, Validação e Verificação de Software'
+    en: 'Software Engineering, Database Systems, Artificial Intelligence, Statistical Inference & Regression Analysis, Software Verification & Validation'
+
+experience:
+  - id: 'g3p'
+    company: 'G3P Gestão e Planejamento Financeiro'
+    role:
+      pt: 'Estágio em Desenvolvimento FullStack'
+      en: 'FullStack / Backend Software Engineer Intern'
+    period:
+      pt: 'Fev/2025 – Presente'
+      en: 'Feb 2025 – Present'
+    location:
+      pt: 'Remoto'
+      en: 'Remote'
+    tech_stack:
+      - 'C# (ASP.NET Core)'
+      - 'Vue.js'
+      - 'SQL Server'
+      - 'EF Core'
+      - 'xUnit'
+      - 'Azure Functions'
+      - 'RabbitMQ'
+      - 'Docker'
+      - 'Azure DevOps'
+      - 'DDD'
+    bullets:
+      - id: 'desktop_integration'
+        tags: ['csharp', 'desktop', 'backend', 'automation', 'architecture', 'fullstack']
+        pt: 'Desenvolvi uma aplicação desktop integrada ao Windows Explorer que automatiza a criação de pacotes de documentos contábeis via seleção direta de arquivos, eliminando a etapa manual de submissão no fluxo web;'
+        en: 'Engineered a desktop application integrated into Windows Explorer automating accounting package creation directly from file selection, eliminating manual web submission steps;'
+      - id: 'tax_parser'
+        tags: ['backend', 'fullstack', 'vue', 'automation', 'regex', 'csharp']
+        pt: 'Implementei identificação automática de CNPJ/CPF e sugestão contextual de mensagens baseada na estrutura dos documentos fiscais (NFS-e, DAS, etc.), reduzindo o fluxo do usuário a apenas conferência e autorização final;'
+        en: 'Implemented automated CNPJ/CPF extraction and context-aware message suggestion from fiscal documents (NFS-e, DAS), streamlining user workflow to a single review and authorization step;'
+      - id: 'async_queue'
+        tags: ['backend', 'cloud', 'rabbitmq', 'azure', 'distributed', 'microservices', 'csharp']
+        pt: 'Desenvolvi rotinas assíncronas escaláveis utilizando Azure Functions e RabbitMQ para processamento em background e desacoplamento de documentos contábeis;'
+        en: 'Developed scalable asynchronous background processing pipelines using Azure Functions and RabbitMQ for decoupled accounting document ingestion;'
+      - id: 'ddd_testing'
+        tags: ['csharp', 'backend', 'ddd', 'clean_code', 'testing', 'sql', 'tdd']
+        pt: 'Utilizei C#/ASP.NET Core, Vue.js, SQL Server e Entity Framework Core seguindo princípios de Domain-Driven Design (DDD), com testes automatizados via xUnit;'
+        en: 'Architected backend services using C#/ASP.NET Core, Vue.js, SQL Server, and EF Core following Domain-Driven Design (DDD) principles, with automated testing via xUnit;'
+
+projects:
+  - id: 'wiredpanda'
+    name: 'Projeto wiRedPanda'
+    url: 'https://gibis-unifesp.github.io/wiRedPanda/pt-br/'
+    role:
+      pt: 'Desenvolvedor C++/Qt'
+      en: 'C++/Qt Core Developer'
+    period:
+      pt: 'Ago/2023 – Presente'
+      en: 'Aug 2023 – Present'
+    tech_stack:
+      - 'Qt'
+      - 'C++'
+      - 'Linux'
+      - 'Astro.js'
+    tags: ['cplusplus', 'qt', 'desktop', 'systems', 'linux', 'open-source', 'web', 'frontend']
+    bullets:
+      - id: 'wp_core'
+        tags: ['cplusplus', 'qt', 'education', 'systems']
+        pt: 'Participei da democratização do ensino de circuitos digitais na UNIFESP fornecendo a ferramenta padrão para a disciplina ao co-desenvolver o simulador de circuitos open-source wiRedPanda utilizando C++ e framework Qt;'
+        en: 'Co-developed the open-source digital circuit simulator wiRedPanda in C++ and Qt, adopted as the standard teaching tool for digital circuits courses at UNIFESP;'
+      - id: 'wp_aur'
+        tags: ['linux', 'packaging', 'devops']
+        pt: 'Democratizei o acesso ao software para usuários Linux criando e mantendo o pacote da aplicação no AUR (Arch User Repository), simplificando a instalação e aumentando a acessibilidade do software;'
+        en: 'Expanded software distribution for Linux users by creating and maintaining the official package on the Arch User Repository (AUR), streamlining installation and accessibility;'
+      - id: 'wp_portal'
+        tags: ['web', 'frontend', 'astro']
+        pt: 'Melhorei a experiência de onboarding de novos usuários facilitando o primeiro contato ao desenvolver e implantar um portal web do software utilizando Astro.js;'
+        en: 'Improved new user onboarding and project documentation by building and deploying the official web portal using Astro.js;'
+
+  - id: 'goblin'
+    name: 'Goblin'
+    url: 'https://github.com/joao-zip/goblin'
+    role:
+      pt: 'Criador / Desenvolvedor Go'
+      en: 'Creator / Go Developer'
+    period:
+      pt: 'Jul/2024'
+      en: 'Jul 2024'
+    tech_stack:
+      - 'Go'
+      - 'AST'
+      - 'Mutation Testing'
+    tags: ['go', 'golang', 'testing', 'systems', 'ast', 'compilers']
+    bullets:
+      - id: 'goblin_intro'
+        tags: ['go', 'testing', 'academic']
+        pt: 'Biblioteca de testes de mutação escrita em Go, como projeto final de validação e verificação de software, na UNIFESP;'
+        en: 'Mutation testing library written in Go as final capstone project for Software Verification & Validation at UNIFESP;'
+      - id: 'goblin_ast'
+        tags: ['go', 'testing', 'ast', 'compilers']
+        pt: 'Desenvolvi a ferramenta para automatizar a injeção de falhas sintáticas na AST para identificar lacunas em suítes de testes unitários;'
+        en: 'Engineered the tool to automate synthetic syntax fault injection into the AST, uncovering blind spots and weaknesses in unit test suites;'
+
+skills:
+  languages_spoken:
+    pt: 'Inglês - C1 (EF SET Certificado) | Libras - Básico | Português - Nativo'
+    en: 'English - C1 (EF SET Certified) | Portuguese - Native | Libras - Basic'
+  languages:
+    pt: 'C++, C#, Python - Avançado | Go, TypeScript, Java - Intermediário | SQL, JavaScript'
+    en: 'C++, C#, Python - Advanced | Go, TypeScript, Java - Intermediate | SQL, JavaScript'
+  frameworks_tech:
+    pt: '.NET / ASP.NET Core, Entity Framework Core, Azure Functions, RabbitMQ, Vue.js, Qt (C++), Astro.js'
+    en: '.NET / ASP.NET Core, Entity Framework Core, Azure Functions, RabbitMQ, Vue.js, Qt (C++), Astro.js'
+  databases:
+    pt: 'SQL Server, PostgreSQL, MongoDB, SQLite'
+    en: 'SQL Server, PostgreSQL, MongoDB, SQLite'
+  practices:
+    pt: 'DDD, Arquitetura Limpa, Código Limpo, TDD, Testes de Mutação, CI/CD'
+    en: 'DDD, Clean Architecture, Clean Code, TDD, Mutation Testing, CI/CD'
+  technologies:
+    pt: 'GNU/Linux, Docker, RabbitMQ, Git, Azure DevOps, xUnit'
+    en: 'GNU/Linux, Docker, RabbitMQ, Git, Azure DevOps, xUnit'
+
+awards:
+  pt:
+    - 'Destaque do ano de instrução no serviço militar obrigatório - 2021'
+    - 'Fundamentos de Ciência de Dados - UNIFESP'
+    - 'Desenvolvedor de Games - UNIFESP'
+  en:
+    - 'Instruction Year Honor Award in mandatory military service - 2021'
+    - 'Fundamentals of Data Science - UNIFESP'
+    - 'Game Developer Track - UNIFESP'
