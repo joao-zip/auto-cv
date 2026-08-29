@@ -7,8 +7,9 @@ from typing import Dict, List, Optional, Set
 from src.ats_analyzer import extract_keywords_from_text, analyze_job_description
 
 class CVGenerator:
-    def __init__(self, profile_path: str = "data/profile.yaml"):
+    def __init__(self, profile_path: str = "data/profile.yaml", fonts_path: str = "fonts"):
         self.profile_path = Path(profile_path)
+        self.fonts_path = Path(fonts_path)
         with open(self.profile_path, "r", encoding="utf-8") as f:
             self.data = yaml.safe_load(f)
 
@@ -60,54 +61,62 @@ class CVGenerator:
             },
         }[lang]
 
-        # Contact line
+        # Contact line with icons
         links = personal.get("links", [])
-        links_typst = []
+        icon_map = {
+            "linkedin": "#fa-linkedin()",
+            "github": "#fa-github()",
+            "site": "#fa-globe()",
+        }
+
+        contact_parts = []
         for lk in links:
             url = lk["url"]
             name = lk["name"]
-            links_typst.append(f'#link("{url}")[{name}]')
+            icon = icon_map.get(name.lower(), "#fa-link()")
+            contact_parts.append(f'#link("{url}")[{icon} {name}]')
         
         email = personal.get("email", "")
         phone = personal.get("phone", "")
-        loc = personal.get("location", {}).get(lang, "")
 
-        contact_parts = []
-        contact_parts.extend(links_typst)
         if email:
-            contact_parts.append(f'#link("mailto:{email}")[{self._sanitize(email)}]')
+            contact_parts.append(f'#link("mailto:{email}")[#fa-envelope() {self._sanitize(email)}]')
         if phone:
-            contact_parts.append(f'[{phone}]')
-        if loc:
-            contact_parts.append(f'[{loc}]')
+            contact_parts.append(f'#fa-phone() {phone}')
 
-        contact_line = " #text(fill: rgb(\"#64748b\"))[|] ".join(contact_parts)
+        contact_line = " #h(10pt) ".join(contact_parts)
 
         typ = []
         typ.append('// AutoCV Generated Document')
+        typ.append('#import "@preview/fontawesome:0.5.0": *')
+        typ.append('')
         typ.append('#set page(')
         typ.append('  paper: "a4",')
-        typ.append('  margin: (x: 1.25cm, top: 0.95cm, bottom: 0.95cm),')
+        typ.append('  margin: (x: 1.25cm, top: 0.85cm, bottom: 0.85cm),')
         typ.append(')')
         typ.append('')
-        typ.append(f'#set text(font: ("DejaVu Serif", "FreeSerif", "Liberation Serif"), size: 9.0pt, lang: "{lang}")')
-        typ.append('#set par(justify: true, leading: 0.44em)')
+        typ.append(f'#set text(font: ("Crimson Pro", "Libertinus Serif", "DejaVu Serif"), size: 10.5pt, lang: "{lang}", hyphenate: false)')
+        typ.append('#set par(justify: false, leading: 0.43em)')
         typ.append('')
         typ.append('#let section_heading(title) = {')
         typ.append('  v(3.5pt)')
-        typ.append('  text(size: 11.5pt, weight: "bold", fill: rgb("#0f172a"))[#title]')
-        typ.append('  v(-4.5pt)')
-        typ.append('  line(length: 100%, stroke: 0.5pt + rgb("#cbd5e1"))')
-        typ.append('  v(1pt)')
+        typ.append('  text(size: 13.8pt, weight: "bold", fill: rgb("#0f172a"))[#title]')
+        typ.append('  v(-4pt)')
+        typ.append('  line(length: 100%, stroke: 0.5pt + rgb("#94a3b8"))')
+        typ.append('  v(1.5pt)')
+        typ.append('}')
+        typ.append('')
+        typ.append('#let ext_link(url, content) = {')
+        typ.append('  link(url)[#content #text(size: 8pt, fill: rgb("#475569"))[#fa-arrow-up-right-from-square(size: 7pt)]]')
         typ.append('}')
         typ.append('')
         
-        # Header
+        # Header - Left aligned
         name = personal.get("name", "")
-        typ.append(f'#align(center)[')
-        typ.append(f'  #text(size: 19pt, weight: "bold", fill: rgb("#0f172a"))[{name}] \\')
-        typ.append(f'  #v(1pt)')
-        typ.append(f'  #text(size: 8.6pt)[{contact_line}]')
+        typ.append(f'#align(left)[')
+        typ.append(f'  #text(size: 24pt, weight: "bold", fill: rgb("#0f172a"))[{name}] \\')
+        typ.append(f'  #v(2.5pt)')
+        typ.append(f'  #text(size: 9.8pt)[{contact_line}]')
         typ.append(f']')
         typ.append('')
 
@@ -122,12 +131,12 @@ class CVGenerator:
         typ.append(f'#grid(')
         typ.append(f'  columns: (1fr, auto),')
         typ.append(f'  align: (left, right),')
-        typ.append(f'  [ *{inst}* \\ #text(style: "italic", size: 8.6pt)[{degree}] ],')
-        typ.append(f'  [ #text(size: 8.6pt)[{period}] \\ #text(style: "italic", size: 8.2pt, fill: rgb("#64748b"))[{edu_loc}] ]')
+        typ.append(f'  [ *{inst}* \\ #text(style: "italic", size: 10pt)[{degree}] ],')
+        typ.append(f'  [ #text(size: 10pt)[{period}] \\ #text(style: "italic", size: 9.4pt, fill: rgb("#64748b"))[{edu_loc}] ]')
         typ.append(f')')
         if coursework:
-            typ.append(f'#v(-3pt)')
-            typ.append(f'- #text(size: 8.6pt)[*{headings["relevant_courses"]}* {self._sanitize(coursework)}]')
+            typ.append(f'#v(-2.5pt)')
+            typ.append(f'- #text(size: 10.1pt)[*{headings["relevant_courses"]}* {self._sanitize(coursework)}]')
         typ.append('')
 
         # Experience
@@ -143,18 +152,18 @@ class CVGenerator:
             typ.append(f'#grid(')
             typ.append(f'  columns: (1fr, auto),')
             typ.append(f'  align: (left, right),')
-            typ.append(f'  [ *{comp}* \\ #text(style: "italic", size: 8.6pt)[{role}] ],')
-            typ.append(f'  [ #text(size: 8.6pt)[{exp_period}] \\ #text(style: "italic", size: 8.2pt, fill: rgb("#64748b"))[{exp_loc}] ]')
+            typ.append(f'  [ *{comp}* \\ #text(style: "italic", size: 10pt)[{role}] ],')
+            typ.append(f'  [ #text(size: 10pt)[{exp_period}] \\ #text(style: "italic", size: 9.4pt, fill: rgb("#64748b"))[{exp_loc}] ]')
             typ.append(f')')
-            typ.append(f'#v(-4pt)')
+            typ.append(f'#v(-3.5pt)')
             for b in bullets:
                 b_text = b.get(lang, "")
                 if b_text:
-                    typ.append(f'- #text(size: 8.6pt)[{self._sanitize(b_text)}]')
+                    typ.append(f'- #text(size: 10.1pt)[{self._sanitize(b_text)}]')
             if tech_stack:
-                typ.append(f'#v(-3pt)')
-                typ.append(f'#text(size: 8.3pt)[*{headings["tech_stack"]}* {", ".join(tech_stack)}]')
-            typ.append(f'#v(1pt)')
+                typ.append(f'#v(-2.5pt)')
+                typ.append(f'#text(size: 9.6pt)[*{headings["tech_stack"]}* {", ".join(tech_stack)}]')
+            typ.append(f'#v(1.5pt)')
         typ.append('')
 
         # Projects
@@ -167,57 +176,64 @@ class CVGenerator:
             ptech = [self._sanitize(t) for t in proj.get("tech_stack", [])]
             pbullets = proj.get("bullets", [])
 
-            title_render = f'#link("{purl}")[*{pname}*]' if purl else f'*{pname}*'
+            title_render = f'#ext_link("{purl}", [*{pname}*])' if purl else f'*{pname}*'
 
             typ.append(f'#grid(')
             typ.append(f'  columns: (1fr, auto),')
             typ.append(f'  align: (left, right),')
-            typ.append(f'  [ {title_render} \\ #text(style: "italic", size: 8.6pt)[{prole}] ],')
-            typ.append(f'  [ #text(size: 8.6pt)[{pperiod}] ]')
+            typ.append(f'  [ {title_render} \\ #text(style: "italic", size: 10pt)[{prole}] ],')
+            typ.append(f'  [ #text(size: 10pt)[{pperiod}] ]')
             typ.append(f')')
-            typ.append(f'#v(-4pt)')
+            typ.append(f'#v(-3.5pt)')
             for pb in pbullets:
                 pb_text = pb.get(lang, "")
                 if pb_text:
-                    typ.append(f'- #text(size: 8.6pt)[{self._sanitize(pb_text)}]')
+                    typ.append(f'- #text(size: 10.1pt)[{self._sanitize(pb_text)}]')
             if ptech:
-                typ.append(f'#v(-3pt)')
-                typ.append(f'#text(size: 8.3pt)[*{headings["tech_stack"]}* {", ".join(ptech)}]')
-            typ.append(f'#v(1pt)')
+                typ.append(f'#v(-2.5pt)')
+                typ.append(f'#text(size: 9.6pt)[*{headings["tech_stack"]}* {", ".join(ptech)}]')
+            typ.append(f'#v(1.5pt)')
         typ.append('')
 
         # Skills
         typ.append(f'#section_heading("{headings["skills"]}")')
         
-        spoken = skills_data.get("languages_spoken", {}).get(lang, "")
-        if spoken:
-            label = "Idiomas:" if lang == "pt" else "Languages:"
-            typ.append(f'- #text(size: 8.6pt)[*{label}* {self._sanitize(spoken)}]')
+        spoken_data = skills_data.get("languages_spoken", {}).get(lang, {})
+        label_lang = "Idiomas:" if lang == "pt" else "Languages:"
+        if isinstance(spoken_data, dict):
+            stext = spoken_data.get("text", "")
+            cname = spoken_data.get("cert_name", "")
+            curl = spoken_data.get("cert_url", "")
+            extra = spoken_data.get("extra", "")
+            cert_part = f'#ext_link("{curl}", [{cname}])' if curl else cname
+            typ.append(f'- #text(size: 10.1pt)[*{label_lang}* {stext} ({cert_part}) {extra}]')
+        elif spoken_data:
+            typ.append(f'- #text(size: 10.1pt)[*{label_lang}* {self._sanitize(str(spoken_data))}]')
 
         langs = skills_data.get("languages", {}).get(lang, "")
         if langs:
             label = "Linguagens:" if lang == "pt" else "Programming Languages:"
-            typ.append(f'- #text(size: 8.6pt)[*{label}* {self._sanitize(langs)}]')
+            typ.append(f'- #text(size: 10.1pt)[*{label}* {self._sanitize(langs)}]')
 
         fw = skills_data.get("frameworks_tech", {}).get(lang, "")
         if fw:
             label = "Tecnologias & Frameworks:" if lang == "pt" else "Technologies & Frameworks:"
-            typ.append(f'- #text(size: 8.6pt)[*{label}* {self._sanitize(fw)}]')
+            typ.append(f'- #text(size: 10.1pt)[*{label}* {self._sanitize(fw)}]')
 
         db = skills_data.get("databases", {}).get(lang, "")
         if db:
             label = "Bancos de Dados:" if lang == "pt" else "Databases:"
-            typ.append(f'- #text(size: 8.6pt)[*{label}* {self._sanitize(db)}]')
+            typ.append(f'- #text(size: 10.1pt)[*{label}* {self._sanitize(db)}]')
 
         practices = skills_data.get("practices", {}).get(lang, "")
         if practices:
             label = "Práticas & Metodologias:" if lang == "pt" else "Engineering Practices:"
-            typ.append(f'- #text(size: 8.6pt)[*{label}* {self._sanitize(practices)}]')
+            typ.append(f'- #text(size: 10.1pt)[*{label}* {self._sanitize(practices)}]')
 
         devops = skills_data.get("technologies", {}).get(lang, "")
         if devops:
             label = "DevOps & Ferramentas:" if lang == "pt" else "DevOps & Tools:"
-            typ.append(f'- #text(size: 8.6pt)[*{label}* {self._sanitize(devops)}]')
+            typ.append(f'- #text(size: 10.1pt)[*{label}* {self._sanitize(devops)}]')
 
         typ.append('')
 
@@ -225,7 +241,15 @@ class CVGenerator:
         if awards:
             typ.append(f'#section_heading("{headings["awards"]}")')
             for aw in awards:
-                typ.append(f'- #text(size: 8.6pt)[{self._sanitize(aw)}]')
+                if isinstance(aw, dict):
+                    atext = self._sanitize(aw.get("text", ""))
+                    aurl = aw.get("url", "")
+                    if aurl:
+                        typ.append(f'- #text(size: 10.1pt)[#ext_link("{aurl}", [{atext}]) ]')
+                    else:
+                        typ.append(f'- #text(size: 10.1pt)[{atext}]')
+                else:
+                    typ.append(f'- #text(size: 10.1pt)[{self._sanitize(str(aw))}]')
 
         return "\n".join(typ)
 
@@ -238,7 +262,10 @@ class CVGenerator:
             tmp_path = tmp.name
 
         try:
-            cmd = ["typst", "compile", tmp_path, str(out_path.resolve())]
+            cmd = ["typst", "compile"]
+            if self.fonts_path.exists():
+                cmd.extend(["--font-path", str(self.fonts_path.resolve())])
+            cmd.extend([tmp_path, str(out_path.resolve())])
             res = subprocess.run(cmd, capture_output=True, text=True, check=True)
             return True
         except subprocess.CalledProcessError as e:

@@ -2,9 +2,6 @@ personal:
   name: 'João Pedro Martins Oliveira'
   email: 'oliveira.joaop@proton.me'
   phone: '+55 (12) 99669-1514'
-  location:
-    pt: 'São José dos Campos, SP'
-    en: 'São José dos Campos, Brazil'
   links:
     - name: 'LinkedIn'
       url: 'https://www.linkedin.com/in/joao-zip'
@@ -128,8 +125,16 @@ projects:
 
 skills:
   languages_spoken:
-    pt: 'Inglês - C1 (EF SET Certificado) | Libras - Básico | Português - Nativo'
-    en: 'English - C1 (EF SET Certified) | Portuguese - Native | Libras - Basic'
+    pt:
+      text: 'Inglês - C1'
+      cert_name: 'EF SET Certificado'
+      cert_url: 'https://cert.efset.org/pt/X8pbDM'
+      extra: '| Libras - Básico | Português - Nativo'
+    en:
+      text: 'English - C1'
+      cert_name: 'EF SET Certified'
+      cert_url: 'https://cert.efset.org/pt/X8pbDM'
+      extra: '| Portuguese - Native | Libras - Basic'
   languages:
     pt: 'C++, C#, Python - Avançado | Go, TypeScript, Java - Intermediário | SQL, JavaScript'
     en: 'C++, C#, Python - Advanced | Go, TypeScript, Java - Intermediate | SQL, JavaScript'
@@ -148,10 +153,10 @@ skills:
 
 awards:
   pt:
-    - 'Destaque do ano de instrução no serviço militar obrigatório - 2021'
-    - 'Fundamentos de Ciência de Dados - UNIFESP'
-    - 'Desenvolvedor de Games - UNIFESP'
+    - text: 'Destaque do ano de instrução no serviço militar obrigatório - 2021'
+    - text: 'Fundamentos de Ciência de Dados - UNIFESP'
+    - text: 'Desenvolvedor de Games - UNIFESP'
   en:
-    - 'Instruction Year Honor Award in mandatory military service - 2021'
-    - 'Fundamentals of Data Science - UNIFESP'
-    - 'Game Developer Track - UNIFESP'
+    - text: 'Instruction Year Honor Award in mandatory military service - 2021'
+    - text: 'Fundamentals of Data Science - UNIFESP'
+    - text: 'Game Developer Track - UNIFESP'
