@@ -40,7 +40,12 @@ def cmd_generate(args):
             sys.exit(1)
         return
 
-    typ_source = gen.render_typst(lang=args.lang)
+    typ_source = gen.render_typst(
+        lang=args.lang,
+        max_bullets_per_exp=args.max_bullets,
+        selected_project_ids=args.projects.split(",") if args.projects else None,
+        selected_bullet_ids=args.bullets.split(",") if args.bullets else None,
+    )
     default_name = "CV_portugues.pdf" if args.lang == "pt" else "CV_english.pdf"
     output_pdf = args.output or f"output/{default_name}"
     
@@ -83,9 +88,15 @@ def cmd_tailor(args):
     company_slug = args.company.strip().replace(" ", "_") if args.company else "Custom"
     output_pdf = args.output or f"output/CV_Joao_Oliveira_{company_slug}_{args.lang.upper()}.pdf"
 
+    selected_projs = args.projects.split(",") if args.projects else None
+    selected_bullets = args.bullets.split(",") if args.bullets else None
+
     typ_source = gen.render_typst(
         lang=args.lang,
         jd_keywords=set(ats_report["matched_keywords"]),
+        max_bullets_per_exp=args.max_bullets,
+        selected_project_ids=selected_projs,
+        selected_bullet_ids=selected_bullets,
     )
     
     success = gen.compile(typ_source, output_pdf)
@@ -136,6 +147,9 @@ def main():
     p_gen.add_argument("--output", "-o", help="Custom output PDF path")
     p_gen.add_argument("--output-pt", help="Custom output path for PT CV when --all is set")
     p_gen.add_argument("--output-en", help="Custom output path for EN CV when --all is set")
+    p_gen.add_argument("--max-bullets", type=int, help="Maximum number of bullet points per experience")
+    p_gen.add_argument("--projects", help="Comma-separated list of project IDs to include (e.g. goblin,wiredpanda)")
+    p_gen.add_argument("--bullets", help="Comma-separated list of bullet IDs to include")
     p_gen.add_argument("--sync", action="store_true", help="Sync compiled PDFs directly to local portfolio repository")
     p_gen.add_argument("--portfolio", default="~/Repos/joao-zip.github.io", help="Path to portfolio repo directory")
 
@@ -145,6 +159,9 @@ def main():
     p_tailor.add_argument("--jd-text", help="Raw job description text string")
     p_tailor.add_argument("--lang", choices=["pt", "en"], default="en", help="Language for the CV (default: en)")
     p_tailor.add_argument("--company", "-c", help="Company name (for file naming and tagging)")
+    p_tailor.add_argument("--max-bullets", type=int, help="Maximum number of bullet points per experience")
+    p_tailor.add_argument("--projects", help="Comma-separated list of project IDs to include")
+    p_tailor.add_argument("--bullets", help="Comma-separated list of bullet IDs to include")
     p_tailor.add_argument("--output", "-o", help="Custom output PDF path")
 
     # Score

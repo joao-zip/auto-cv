@@ -85,6 +85,7 @@ projects:
       - 'Linux'
       - 'Astro.js'
     tags: ['cplusplus', 'qt', 'desktop', 'systems', 'linux', 'open-source', 'web', 'frontend']
+    default_visible: true
     bullets:
       - id: 'wp_core'
         tags: ['cplusplus', 'qt', 'education', 'systems']
@@ -113,6 +114,7 @@ projects:
       - 'AST'
       - 'Mutation Testing'
     tags: ['go', 'golang', 'testing', 'systems', 'ast', 'compilers']
+    default_visible: true
     bullets:
       - id: 'goblin_intro'
         tags: ['go', 'testing', 'academic']
@@ -122,6 +124,30 @@ projects:
         tags: ['go', 'testing', 'ast', 'compilers']
         pt: 'Desenvolvi a ferramenta para automatizar a injeção de falhas sintáticas na AST para identificar lacunas em suítes de testes unitários;'
         en: 'Engineered the tool to automate synthetic syntax fault injection into the AST, uncovering blind spots and weaknesses in unit test suites;'
+
+  - id: 'caravana_da_ciencia'
+    name: 'Caravana da Ciência'
+    role:
+      pt: 'Membro da Equipe de Extensão'
+      en: 'Extension Project Team Member'
+    period:
+      pt: '2024 – Presente'
+      en: '2024 – Present'
+    tags: ['education', 'academic', 'science', 'outreach', 'mentorship', 'communication', 'unifesp']
+    default_visible: false
+    bullets:
+      - id: 'caravana_mentorship'
+        tags: ['education', 'mentorship', 'science']
+        pt: 'Atuo no fomento à iniciação científica em escolas públicas de São José dos Campos, orientando professores a desenvolverem projetos alinhados à Semana Nacional de Ciência e Tecnologia (SNCT);'
+        en: 'Foster scientific initiation in public schools across São José dos Campos, guiding teachers to develop research projects aligned with the National Science & Technology Week;'
+      - id: 'caravana_congress'
+        tags: ['academic', 'event', 'communication']
+        pt: 'Participo da organização do congresso científico anual na UNIFESP, proporcionando aos estudantes da rede pública a experiência de apresentação de trabalhos acadêmicos;'
+        en: 'Co-organize the annual scientific symposium at UNIFESP, providing public school students with an authentic academic conference presentation experience;'
+      - id: 'caravana_web'
+        tags: ['web', 'communication']
+        pt: 'Responsável pela manutenção e atualização do portal web de comunicação e divulgação do projeto;'
+        en: 'Responsible for maintaining and updating the project public web portal and digital communication;'
 
 skills:
   languages_spoken:

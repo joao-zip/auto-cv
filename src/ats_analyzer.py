@@ -59,6 +59,33 @@ TECH_TAXONOMY = {
     "design patterns": [r"\bdesign patterns\b", r"\bpadr[õo]es de projeto\b"],
     "agile": [r"\bagile\b", r"\bscrum\b", r"\bkanban\b"],
     "distributed systems": [r"\bdistributed\b", r"\bsistemas distribu[íi]dos\b", r"\basync\b", r"\bass[íi]ncron[ao]\b"],
+    "compilers": [r"\bcompilers?\b", r"\bcompiladores\b", r"\bast\b", r"\babstract syntax tree\b"],
+    "desktop": [r"\bdesktop\b", r"\bwindows\b", r"\bgui\b", r"\binterface gr[áa]fica\b"],
+    "systems": [r"\bsystems\b", r"\bsistemas\b", r"\blow[- ]level\b", r"\bbaixo n[íi]vel\b"],
+}
+
+# Tag mapping for semantic matching between bullet/project tags and JD keywords
+TAG_TO_KEYWORDS = {
+    "csharp": ["c#", "asp.net core", "entity framework"],
+    "cplusplus": ["c++", "systems"],
+    "golang": ["go"],
+    "go": ["go"],
+    "desktop": ["desktop", "qt", "c#"],
+    "backend": ["rest api", "microservices", "distributed systems", "sql", "c#", "go", "python"],
+    "cloud": ["azure", "aws", "gcp", "docker", "kubernetes"],
+    "rabbitmq": ["rabbitmq", "distributed systems"],
+    "azure": ["azure", "cloud"],
+    "testing": ["unit testing", "tdd", "mutation testing"],
+    "ast": ["compilers", "go", "testing"],
+    "compilers": ["compilers", "systems"],
+    "linux": ["linux", "devops"],
+    "packaging": ["linux", "ci/cd"],
+    "devops": ["docker", "ci/cd", "git", "linux"],
+    "web": ["vue.js", "react", "typescript", "javascript", "astro"],
+    "frontend": ["vue.js", "react", "typescript", "javascript", "astro"],
+    "fullstack": ["vue.js", "c#", "typescript", "sql"],
+    "ddd": ["ddd", "clean architecture", "clean code"],
+    "sql": ["sql", "sql server", "postgresql"],
 }
 
 def extract_keywords_from_text(text: str) -> Set[str]:
@@ -71,11 +98,26 @@ def extract_keywords_from_text(text: str) -> Set[str]:
                 break
     return found
 
+def score_item_relevance(item_tags: List[str], jd_keywords: Set[str]) -> int:
+    """Calculates a relevance score for a bullet point or project given the JD keywords."""
+    if not jd_keywords:
+        return 1
+    score = 0
+    for tag in item_tags:
+        tag_lower = tag.lower()
+        if tag_lower in jd_keywords:
+            score += 3
+        # Check associated keywords
+        mapped = TAG_TO_KEYWORDS.get(tag_lower, [])
+        for m in mapped:
+            if m in jd_keywords:
+                score += 2
+    return score
+
 def analyze_job_description(jd_text: str, candidate_skills: Set[str]) -> Dict:
     jd_keywords = extract_keywords_from_text(jd_text)
     
     if not jd_keywords:
-        # Fallback if no specific keywords matched
         return {
             "match_score": 100.0,
             "matched_keywords": list(candidate_skills),

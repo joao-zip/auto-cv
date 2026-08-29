@@ -4,7 +4,7 @@ import tempfile
 import yaml
 from pathlib import Path
 from typing import Dict, List, Optional, Set
-from src.ats_analyzer import extract_keywords_from_text, analyze_job_description
+from src.ats_analyzer import extract_keywords_from_text, analyze_job_description, score_item_relevance
 
 class CVGenerator:
     def __init__(self, profile_path: str = "data/profile.yaml", fonts_path: str = "fonts"):
@@ -28,6 +28,9 @@ class CVGenerator:
         lang: str = "pt",
         focus_tags: Optional[List[str]] = None,
         jd_keywords: Optional[Set[str]] = None,
+        max_bullets_per_exp: Optional[int] = None,
+        selected_project_ids: Optional[List[str]] = None,
+        selected_bullet_ids: Optional[List[str]] = None,
     ) -> str:
         lang = lang.lower()
         if lang not in ("pt", "en"):
@@ -149,6 +152,23 @@ class CVGenerator:
             tech_stack = [self._sanitize(t) for t in exp.get("tech_stack", [])]
             bullets = exp.get("bullets", [])
 
+            scored_bullets = []
+            for b in bullets:
+                b_id = b.get("id", "")
+                if selected_bullet_ids and b_id not in selected_bullet_ids:
+                    continue
+                b_tags = b.get("tags", [])
+                score = score_item_relevance(b_tags, jd_keywords or set())
+                b_text = b.get(lang, "")
+                if b_text:
+                    scored_bullets.append((score, b_text))
+
+            if jd_keywords:
+                scored_bullets.sort(key=lambda x: x[0], reverse=True)
+            
+            if max_bullets_per_exp and max_bullets_per_exp > 0:
+                scored_bullets = scored_bullets[:max_bullets_per_exp]
+
             typ.append(f'#grid(')
             typ.append(f'  columns: (1fr, auto),')
             typ.append(f'  align: (left, right),')
@@ -156,19 +176,39 @@ class CVGenerator:
             typ.append(f'  [ #text(size: 10pt)[{exp_period}] \\ #text(style: "italic", size: 9.4pt, fill: rgb("#64748b"))[{exp_loc}] ]')
             typ.append(f')')
             typ.append(f'#v(-3.5pt)')
-            for b in bullets:
-                b_text = b.get(lang, "")
-                if b_text:
-                    typ.append(f'- #text(size: 10.1pt)[{self._sanitize(b_text)}]')
+            for _, b_text in scored_bullets:
+                typ.append(f'- #text(size: 10.1pt)[{self._sanitize(b_text)}]')
             if tech_stack:
                 typ.append(f'#v(-2.5pt)')
                 typ.append(f'#text(size: 9.6pt)[*{headings["tech_stack"]}* {", ".join(tech_stack)}]')
             typ.append(f'#v(1.5pt)')
         typ.append('')
 
-        # Projects
+        # Projects (with intelligent ranking, default_visible, and selection)
         typ.append(f'#section_heading("{headings["proj"]}")')
+        scored_projs = []
         for proj in projs:
+            p_id = proj.get("id", "")
+            is_default = proj.get("default_visible", True)
+
+            if selected_project_ids is not None:
+                if p_id not in selected_project_ids:
+                    continue
+            elif not is_default:
+                if not jd_keywords:
+                    continue
+                score = score_item_relevance(proj.get("tags", []), jd_keywords)
+                if score <= 1:
+                    continue
+
+            p_tags = proj.get("tags", [])
+            score = score_item_relevance(p_tags, jd_keywords or set())
+            scored_projs.append((score, proj))
+
+        if jd_keywords:
+            scored_projs.sort(key=lambda x: x[0], reverse=True)
+
+        for _, proj in scored_projs:
             pname = proj.get("name", "")
             purl = proj.get("url", "")
             prole = proj.get("role", {}).get(lang, "")
