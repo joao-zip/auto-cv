@@ -125,6 +125,38 @@ projects:
         pt: 'Desenvolvi a ferramenta para automatizar a injeção de falhas sintáticas na AST para identificar lacunas em suítes de testes unitários;'
         en: 'Engineered the tool to automate synthetic syntax fault injection into the AST, uncovering blind spots and weaknesses in unit test suites;'
 
+  - id: 'tcc_libras'
+    name: 'Reconhecimento de Sinais de Emergência em LIBRAS (TCC)'
+    url: 'https://github.com/joao-zip/tcc'
+    role:
+      pt: 'Pesquisador em Visão Computacional / Autor'
+      en: 'Computer Vision Researcher / Author'
+    period:
+      pt: '2024 – 2025'
+      en: '2024 – 2025'
+    tech_stack:
+      - 'PyTorch'
+      - 'Python'
+      - 'OpenCV'
+      - 'R(2+1)D-18'
+      - 'Deep Learning'
+      - 'Albumentations'
+    tags: ['python', 'pytorch', 'deep-learning', 'computer-vision', 'ai', 'dataset', 'academic', 'tcc', 'opencv', 'action-recognition']
+    default_visible: false
+    bullets:
+      - id: 'libras_dataset'
+        tags: ['dataset', 'academic', 'ai', 'libras']
+        pt: 'Estruturei o protocolo de coleta, gravação e curadoria de uma base de dados inédita voltada ao reconhecimento de sinais de emergência em LIBRAS;'
+        en: 'Structured the collection protocol, recording, and curation of a novel emergency sign language video dataset in LIBRAS (Brazilian Sign Language);'
+      - id: 'libras_validation'
+        tags: ['academic', 'validation', 'libras']
+        pt: 'Realizei a validação técnica e semântica de todo o corpus gestual em conjunto com profissional especialista e intérprete da área;'
+        en: 'Conducted formal technical and semantic validation of the gesture corpus in collaboration with a certified LIBRAS specialist and interpreter;'
+      - id: 'libras_model'
+        tags: ['pytorch', 'python', 'deep-learning', 'computer-vision', 'ai']
+        pt: 'Implementei e avaliei redes neurais convolucionais têmporo-espaciais baseadas na arquitetura R(2+1)D-18 para reconhecimento de ações em vídeo utilizando PyTorch e OpenCV;'
+        en: 'Engineered and benchmarked spatiotemporal convolutional neural networks using the R(2+1)D-18 architecture for video action recognition with PyTorch and OpenCV;'
+
   - id: 'caravana_da_ciencia'
     name: 'Caravana da Ciência'
     role:
@@ -165,17 +197,17 @@ skills:
     pt: 'C++, C#, Python - Avançado | Go, TypeScript, Java - Intermediário | SQL, JavaScript'
     en: 'C++, C#, Python - Advanced | Go, TypeScript, Java - Intermediate | SQL, JavaScript'
   frameworks_tech:
-    pt: '.NET / ASP.NET Core, Entity Framework Core, Azure Functions, RabbitMQ, Vue.js, Qt (C++), Astro.js'
-    en: '.NET / ASP.NET Core, Entity Framework Core, Azure Functions, RabbitMQ, Vue.js, Qt (C++), Astro.js'
+    pt: '.NET / ASP.NET Core, Entity Framework Core, Azure Functions, RabbitMQ, Vue.js, Qt (C++), PyTorch, OpenCV, Astro.js'
+    en: '.NET / ASP.NET Core, Entity Framework Core, Azure Functions, RabbitMQ, Vue.js, Qt (C++), PyTorch, OpenCV, Astro.js'
   databases:
     pt: 'SQL Server, PostgreSQL, MongoDB, SQLite'
     en: 'SQL Server, PostgreSQL, MongoDB, SQLite'
   practices:
-    pt: 'DDD, Arquitetura Limpa, Código Limpo, TDD, Testes de Mutação, CI/CD'
-    en: 'DDD, Clean Architecture, Clean Code, TDD, Mutation Testing, CI/CD'
+    pt: 'DDD, Arquitetura Limpa, Código Limpo, TDD, Testes de Mutação, CI/CD, Deep Learning'
+    en: 'DDD, Clean Architecture, Clean Code, TDD, Mutation Testing, CI/CD, Deep Learning'
   technologies:
-    pt: 'GNU/Linux, Docker, RabbitMQ, Git, Azure DevOps, xUnit'
-    en: 'GNU/Linux, Docker, RabbitMQ, Git, Azure DevOps, xUnit'
+    pt: 'GNU/Linux, Docker, RabbitMQ, Git, Azure DevOps, xUnit, PyTorch'
+    en: 'GNU/Linux, Docker, RabbitMQ, Git, Azure DevOps, xUnit, PyTorch'
 
 awards:
   pt:
