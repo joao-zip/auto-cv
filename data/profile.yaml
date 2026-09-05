@@ -19,21 +19,24 @@ education:
     pt: 'Bacharelado em Ciência da Computação'
     en: 'Bachelor of Science in Computer Science'
   period:
-    pt: 'Previsão de conclusão: Jul/2027'
-    en: 'Expected Graduation: Jul 2027'
+    pt: 'Previsão: Jul/2027'
+    en: 'Expected: Jul 2027'
   location:
     pt: 'São José dos Campos, SP'
     en: 'São José dos Campos, Brazil'
   coursework:
     pt: 'Engenharia de Software, Banco de Dados, Inteligência Artificial, Inferência e Análise de Regressão, Validação e Verificação de Software'
     en: 'Software Engineering, Database Systems, Artificial Intelligence, Statistical Inference & Regression Analysis, Software Verification & Validation'
+  tcc:
+    pt: 'Construção de uma base de dados de sinais de emergência em Libras aplicada a redes neurais, para um sistema de auxílio a pessoas surdas no acionamento de serviços de emergência (SAMU, Polícia, Bombeiros).'
+    en: 'Building a dataset of emergency sign language in LIBRAS applied to neural networks, for a system assisting deaf individuals in contacting emergency services (SAMU, Police, Fire Department).'
 
 experience:
   - id: 'g3p'
     company: 'G3P Gestão e Planejamento Financeiro'
     role:
       pt: 'Estágio em Desenvolvimento FullStack'
-      en: 'FullStack / Backend Software Engineer Intern'
+      en: 'FullStack Software Engineer Intern'
     period:
       pt: 'Fev/2025 – Presente'
       en: 'Feb 2025 – Present'
@@ -69,6 +72,63 @@ experience:
         pt: 'Utilizei C#/ASP.NET Core, Vue.js, SQL Server e Entity Framework Core seguindo princípios de Domain-Driven Design (DDD), com testes automatizados via xUnit;'
         en: 'Architected backend services using C#/ASP.NET Core, Vue.js, SQL Server, and EF Core following Domain-Driven Design (DDD) principles, with automated testing via xUnit;'
 
+leadership:
+  - id: 'tiro_de_guerra'
+    name:
+      pt: 'Exército Brasileiro — Tiro de Guerra'
+      en: 'Brazilian Army — Tiro de Guerra'
+    role:
+      pt: 'Cabo / Chefe de Turma'
+      en: 'Corporal / Squad Leader'
+    period:
+      pt: '2021'
+      en: '2021'
+    location:
+      pt: 'São José dos Campos, SP'
+      en: 'São José dos Campos, Brazil'
+    tags: ['leadership', 'military', 'teamwork', 'discipline', 'social-impact', 'community']
+    bullets:
+      - id: 'tg_cabo'
+        tags: ['leadership', 'teamwork', 'discipline']
+        pt: 'Concluído como Cabo; atuei como chefe de turma durante todo o ano de instrução, liderando um grupo de atiradores em rotina diária e atividades de instrução;'
+        en: 'Served as Corporal and Squad Leader throughout the instruction year, leading a squad of recruits in daily operational routines and military training;'
+      - id: 'tg_destaque'
+        tags: ['leadership', 'excellence', 'award']
+        pt: 'Destaque geral do ano e destaque do curso de formação de cabos, reconhecimentos concedidos a partir de desempenho e liderança;'
+        en: 'Awarded Overall Top Honor Graduate of the Year and Corporal Training Course Honor Graduate, recognized for outstanding performance and leadership;'
+      - id: 'tg_social'
+        tags: ['social-impact', 'community', 'volunteering', 'leadership']
+        pt: 'Organizei e participei de campanhas sociais de arrecadação de agasalhos e alimentos destinadas a um lar de idosos da região;'
+        en: 'Organized and participated in community donation drives collecting winter clothing and food supplies for a local elderly care facility;'
+
+  - id: 'caravana_da_ciencia'
+    name:
+      pt: 'Caravana da Ciência (UNIFESP)'
+      en: 'Caravana da Ciência (UNIFESP)'
+    role:
+      pt: 'Membro da Equipe de Extensão'
+      en: 'Extension Project Member'
+    period:
+      pt: 'Atual'
+      en: '2024 – Present'
+    location:
+      pt: 'São José dos Campos, SP'
+      en: 'São José dos Campos, Brazil'
+    tags: ['education', 'academic', 'science', 'outreach', 'mentorship', 'communication', 'unifesp', 'leadership', 'social-impact']
+    bullets:
+      - id: 'caravana_mentorship'
+        tags: ['education', 'mentorship', 'science', 'leadership']
+        pt: 'Integro a organização de um projeto de extensão que capacita professores da rede pública de São José dos Campos a orientar projetos de iniciação científica júnior com seus alunos, culminando na apresentação dos trabalhos em formato de congresso durante a Semana Nacional de Ciência e Tecnologia;'
+        en: 'Co-organize an outreach project training public school teachers in São José dos Campos to mentor junior scientific research, culminating in research presentations at National Science and Technology Week;'
+      - id: 'caravana_web'
+        tags: ['web', 'communication']
+        pt: 'Responsável pela atualização e manutenção do site do projeto (Wix);'
+        en: 'Responsible for maintaining and updating the project official website (Wix);'
+      - id: 'caravana_logistica'
+        tags: ['event', 'organization', 'logistics', 'leadership']
+        pt: 'Atuo na organização e logística do evento presencial de apresentação dos trabalhos;'
+        en: 'Coordinate on-site event logistics and operations for the annual research symposium;'
+
 projects:
   - id: 'wiredpanda'
     name: 'Projeto wiRedPanda'
@@ -89,15 +149,15 @@ projects:
     bullets:
       - id: 'wp_core'
         tags: ['cplusplus', 'qt', 'education', 'systems']
-        pt: 'Participei da democratização do ensino de circuitos digitais na UNIFESP fornecendo a ferramenta padrão para a disciplina ao co-desenvolver o simulador de circuitos open-source wiRedPanda utilizando C++ e framework Qt;'
+        pt: 'Contribuo para o simulador de circuitos digitais open-source utilizado como ferramenta padrão da disciplina de Circuitos Digitais na UNIFESP, desenvolvido em C++ e Qt;'
         en: 'Co-developed the open-source digital circuit simulator wiRedPanda in C++ and Qt, adopted as the standard teaching tool for digital circuits courses at UNIFESP;'
       - id: 'wp_aur'
         tags: ['linux', 'packaging', 'devops']
-        pt: 'Democratizei o acesso ao software para usuários Linux criando e mantendo o pacote da aplicação no AUR (Arch User Repository), simplificando a instalação e aumentando a acessibilidade do software;'
+        pt: 'Criei e mantenho o pacote da aplicação no AUR (Arch User Repository), ampliando o acesso da comunidade Linux ao software;'
         en: 'Expanded software distribution for Linux users by creating and maintaining the official package on the Arch User Repository (AUR), streamlining installation and accessibility;'
       - id: 'wp_portal'
         tags: ['web', 'frontend', 'astro']
-        pt: 'Melhorei a experiência de onboarding de novos usuários facilitando o primeiro contato ao desenvolver e implantar um portal web do software utilizando Astro.js;'
+        pt: 'Desenvolvi e implantei um portal web em Astro.js para melhorar o onboarding de novos usuários;'
         en: 'Improved new user onboarding and project documentation by building and deploying the official web portal using Astro.js;'
 
   - id: 'goblin'
@@ -118,11 +178,11 @@ projects:
     bullets:
       - id: 'goblin_intro'
         tags: ['go', 'testing', 'academic']
-        pt: 'Biblioteca de testes de mutação escrita em Go, como projeto final de validação e verificação de software, na UNIFESP;'
+        pt: 'Biblioteca de testes de mutação escrita em Go, desenvolvida como projeto final da disciplina de Validação e Verificação de Software;'
         en: 'Mutation testing library written in Go as final capstone project for Software Verification & Validation at UNIFESP;'
       - id: 'goblin_ast'
         tags: ['go', 'testing', 'ast', 'compilers']
-        pt: 'Desenvolvi a ferramenta para automatizar a injeção de falhas sintáticas na AST para identificar lacunas em suítes de testes unitários;'
+        pt: 'Automatiza a injeção de falhas sintáticas na AST para identificar lacunas em suítes de testes unitários;'
         en: 'Engineered the tool to automate synthetic syntax fault injection into the AST, uncovering blind spots and weaknesses in unit test suites;'
 
   - id: 'tcc_libras'
@@ -157,48 +217,24 @@ projects:
         pt: 'Implementei e avaliei redes neurais convolucionais têmporo-espaciais baseadas na arquitetura R(2+1)D-18 para reconhecimento de ações em vídeo utilizando PyTorch e OpenCV;'
         en: 'Engineered and benchmarked spatiotemporal convolutional neural networks using the R(2+1)D-18 architecture for video action recognition with PyTorch and OpenCV;'
 
-  - id: 'caravana_da_ciencia'
-    name: 'Caravana da Ciência'
-    role:
-      pt: 'Membro da Equipe de Extensão'
-      en: 'Extension Project Team Member'
-    period:
-      pt: '2024 – Presente'
-      en: '2024 – Present'
-    tags: ['education', 'academic', 'science', 'outreach', 'mentorship', 'communication', 'unifesp']
-    default_visible: false
-    bullets:
-      - id: 'caravana_mentorship'
-        tags: ['education', 'mentorship', 'science']
-        pt: 'Atuo no fomento à iniciação científica em escolas públicas de São José dos Campos, orientando professores a desenvolverem projetos alinhados à Semana Nacional de Ciência e Tecnologia (SNCT);'
-        en: 'Foster scientific initiation in public schools across São José dos Campos, guiding teachers to develop research projects aligned with the National Science & Technology Week;'
-      - id: 'caravana_congress'
-        tags: ['academic', 'event', 'communication']
-        pt: 'Participo da organização do congresso científico anual na UNIFESP, proporcionando aos estudantes da rede pública a experiência de apresentação de trabalhos acadêmicos;'
-        en: 'Co-organize the annual scientific symposium at UNIFESP, providing public school students with an authentic academic conference presentation experience;'
-      - id: 'caravana_web'
-        tags: ['web', 'communication']
-        pt: 'Responsável pela manutenção e atualização do portal web de comunicação e divulgação do projeto;'
-        en: 'Responsible for maintaining and updating the project public web portal and digital communication;'
-
 skills:
   languages_spoken:
     pt:
-      text: 'Inglês - C1'
+      text: 'Inglês – C1'
       cert_name: 'EF SET Certificado'
       cert_url: 'https://cert.efset.org/pt/X8pbDM'
-      extra: '| Libras - Básico | Português - Nativo'
+      extra: '| Libras – Básico | Português – Nativo'
     en:
-      text: 'English - C1'
+      text: 'English – C1'
       cert_name: 'EF SET Certified'
       cert_url: 'https://cert.efset.org/pt/X8pbDM'
-      extra: '| Portuguese - Native | Libras - Basic'
+      extra: '| Portuguese – Native | Libras – Basic'
   languages:
-    pt: 'C++, C#, Python - Avançado | Go, TypeScript, Java - Intermediário | SQL, JavaScript'
-    en: 'C++, C#, Python - Advanced | Go, TypeScript, Java - Intermediate | SQL, JavaScript'
+    pt: 'C++, C#, Python (Avançado) | Go, TypeScript, Java (Intermediário) | SQL, JavaScript'
+    en: 'C++, C#, Python (Advanced) | Go, TypeScript, Java (Intermediate) | SQL, JavaScript'
   frameworks_tech:
-    pt: '.NET / ASP.NET Core, Entity Framework Core, Azure Functions, RabbitMQ, Vue.js, Qt (C++), PyTorch, OpenCV, Astro.js'
-    en: '.NET / ASP.NET Core, Entity Framework Core, Azure Functions, RabbitMQ, Vue.js, Qt (C++), PyTorch, OpenCV, Astro.js'
+    pt: '.NET/ASP.NET Core, Entity Framework Core, Azure Functions, RabbitMQ, Vue.js, Qt (C++), PyTorch, OpenCV, Astro.js'
+    en: '.NET/ASP.NET Core, Entity Framework Core, Azure Functions, RabbitMQ, Vue.js, Qt (C++), PyTorch, OpenCV, Astro.js'
   databases:
     pt: 'SQL Server, PostgreSQL, MongoDB, SQLite'
     en: 'SQL Server, PostgreSQL, MongoDB, SQLite'
@@ -206,15 +242,14 @@ skills:
     pt: 'DDD, Arquitetura Limpa, Código Limpo, TDD, Testes de Mutação, CI/CD, Deep Learning'
     en: 'DDD, Clean Architecture, Clean Code, TDD, Mutation Testing, CI/CD, Deep Learning'
   technologies:
-    pt: 'GNU/Linux, Docker, RabbitMQ, Git, Azure DevOps, xUnit, PyTorch'
-    en: 'GNU/Linux, Docker, RabbitMQ, Git, Azure DevOps, xUnit, PyTorch'
+    pt: 'GNU/Linux, Docker, Git, Azure DevOps, xUnit'
+    en: 'GNU/Linux, Docker, Git, Azure DevOps, xUnit'
 
 awards:
   pt:
-    - text: 'Destaque do ano de instrução no serviço militar obrigatório - 2021'
-    - text: 'Fundamentos de Ciência de Dados - UNIFESP'
-    - text: 'Desenvolvedor de Games - UNIFESP'
+    - text: 'Fundamentos de Ciência de Dados – UNIFESP'
+    - text: 'Desenvolvedor de Games – UNIFESP'
   en:
-    - text: 'Instruction Year Honor Award in mandatory military service - 2021'
-    - text: 'Fundamentals of Data Science - UNIFESP'
-    - text: 'Game Developer Track - UNIFESP'
+    - text: 'Fundamentals of Data Science – UNIFESP'
+    - text: 'Game Developer Track – UNIFESP'
+

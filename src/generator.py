@@ -26,11 +26,13 @@ class CVGenerator:
     def render_typst(
         self,
         lang: str = "pt",
+        preset: Optional[str] = "tech",
         focus_tags: Optional[List[str]] = None,
         jd_keywords: Optional[Set[str]] = None,
         max_bullets_per_exp: Optional[int] = None,
         selected_project_ids: Optional[List[str]] = None,
         selected_bullet_ids: Optional[List[str]] = None,
+        include_leadership: Optional[bool] = None,
     ) -> str:
         lang = lang.lower()
         if lang not in ("pt", "en"):
@@ -39,27 +41,57 @@ class CVGenerator:
         personal = self.data.get("personal", {})
         edu = self.data.get("education", {})
         exps = self.data.get("experience", [])
+        leadership = self.data.get("leadership", [])
         projs = self.data.get("projects", [])
         skills_data = self.data.get("skills", {})
         awards = self.data.get("awards", {}).get(lang, [])
 
+        # Preset logic
+        preset = (preset or "tech").lower()
+        if preset == "trainee":
+            if include_leadership is None:
+                include_leadership = True
+            if selected_project_ids is None:
+                selected_project_ids = ["wiredpanda"]
+            font_size = "10pt"
+            line_leading = "0.41em"
+            margins = "(x: 1.25cm, top: 0.9cm, bottom: 0.9cm)"
+        elif preset == "tech":
+            if include_leadership is None:
+                include_leadership = False
+            if selected_project_ids is None:
+                selected_project_ids = ["wiredpanda", "goblin"]
+            font_size = "10.2pt"
+            line_leading = "0.43em"
+            margins = "(x: 1.25cm, top: 0.85cm, bottom: 0.85cm)"
+        else:  # "full"
+            if include_leadership is None:
+                include_leadership = True
+            font_size = "10.5pt"
+            line_leading = "0.45em"
+            margins = "(x: 1.25cm, top: 0.9cm, bottom: 0.9cm)"
+
         headings = {
             "pt": {
                 "edu": "Educação",
-                "exp": "Experiência",
-                "proj": "Projetos",
-                "skills": "Habilidades",
-                "awards": "Conquistas e Certificados",
+                "exp": "Experiência Profissional",
+                "leadership": "Liderança e Atividades Extracurriculares",
+                "proj": "Projetos Relevantes" if preset == "trainee" else "Projetos Técnicos",
+                "skills": "Habilidades & Certificações" if preset == "trainee" else "Habilidades",
+                "awards": "Certificados",
                 "relevant_courses": "Disciplinas relevantes:",
+                "tcc_label": "Trabalho de Conclusão de Curso:",
                 "tech_stack": "Tech Stack:",
             },
             "en": {
                 "edu": "Education",
-                "exp": "Experience",
-                "proj": "Projects",
-                "skills": "Technical Skills",
-                "awards": "Honors & Certifications",
+                "exp": "Professional Experience",
+                "leadership": "Leadership & Extracurricular Activities",
+                "proj": "Relevant Projects" if preset == "trainee" else "Technical Projects",
+                "skills": "Skills & Certifications" if preset == "trainee" else "Technical Skills",
+                "awards": "Certifications & Honors",
                 "relevant_courses": "Relevant Coursework:",
+                "tcc_label": "Capstone Project / Thesis:",
                 "tech_stack": "Tech Stack:",
             },
         }[lang]
@@ -87,7 +119,7 @@ class CVGenerator:
         if phone:
             contact_parts.append(f'#fa-phone() {phone}')
 
-        contact_line = " #h(10pt) ".join(contact_parts)
+        contact_line = " #h(8pt) ".join(contact_parts)
 
         typ = []
         typ.append('// AutoCV Generated Document')
@@ -95,31 +127,31 @@ class CVGenerator:
         typ.append('')
         typ.append('#set page(')
         typ.append('  paper: "a4",')
-        typ.append('  margin: (x: 1.25cm, top: 0.85cm, bottom: 0.85cm),')
+        typ.append(f'  margin: {margins},')
         typ.append(')')
         typ.append('')
-        typ.append(f'#set text(font: ("Crimson Pro", "Libertinus Serif", "DejaVu Serif"), size: 10.5pt, lang: "{lang}", hyphenate: false)')
-        typ.append('#set par(justify: false, leading: 0.43em)')
+        typ.append(f'#set text(font: ("Crimson Pro", "Libertinus Serif", "DejaVu Serif"), size: {font_size}, lang: "{lang}", hyphenate: false)')
+        typ.append(f'#set par(justify: false, leading: {line_leading})')
         typ.append('')
         typ.append('#let section_heading(title) = {')
         typ.append('  v(3.5pt)')
-        typ.append('  text(size: 13.8pt, weight: "bold", fill: rgb("#0f172a"))[#title]')
-        typ.append('  v(-4pt)')
+        typ.append('  text(size: 13pt, weight: "bold", fill: rgb("#0f172a"))[#title]')
+        typ.append('  v(-4.5pt)')
         typ.append('  line(length: 100%, stroke: 0.5pt + rgb("#94a3b8"))')
         typ.append('  v(1.5pt)')
         typ.append('}')
         typ.append('')
         typ.append('#let ext_link(url, content) = {')
-        typ.append('  link(url)[#content #text(size: 8pt, fill: rgb("#475569"))[#fa-arrow-up-right-from-square(size: 7pt)]]')
+        typ.append('  link(url)[#content #text(size: 7.8pt, fill: rgb("#475569"))[#fa-arrow-up-right-from-square(size: 6.8pt)]]')
         typ.append('}')
         typ.append('')
         
         # Header - Left aligned
         name = personal.get("name", "")
         typ.append(f'#align(left)[')
-        typ.append(f'  #text(size: 24pt, weight: "bold", fill: rgb("#0f172a"))[{name}] \\')
-        typ.append(f'  #v(2.5pt)')
-        typ.append(f'  #text(size: 9.8pt)[{contact_line}]')
+        typ.append(f'  #text(size: 21pt, weight: "bold", fill: rgb("#0f172a"))[{name}] \\')
+        typ.append(f'  #v(2pt)')
+        typ.append(f'  #text(size: 9.5pt)[{contact_line}]')
         typ.append(f']')
         typ.append('')
 
@@ -130,16 +162,20 @@ class CVGenerator:
         period = edu.get("period", {}).get(lang, "")
         edu_loc = edu.get("location", {}).get(lang, "")
         coursework = edu.get("coursework", {}).get(lang, "")
+        tcc = edu.get("tcc", {}).get(lang, "")
 
         typ.append(f'#grid(')
         typ.append(f'  columns: (1fr, auto),')
         typ.append(f'  align: (left, right),')
-        typ.append(f'  [ *{inst}* \\ #text(style: "italic", size: 10pt)[{degree}] ],')
-        typ.append(f'  [ #text(size: 10pt)[{period}] \\ #text(style: "italic", size: 9.4pt, fill: rgb("#64748b"))[{edu_loc}] ]')
+        typ.append(f'  [ *{inst}* \\ #text(style: "italic", size: 9.5pt)[{degree}] ],')
+        typ.append(f'  [ #text(size: 9.5pt)[{period}] \\ #text(style: "italic", size: 9pt, fill: rgb("#64748b"))[{edu_loc}] ]')
         typ.append(f')')
         if coursework:
-            typ.append(f'#v(-2.5pt)')
-            typ.append(f'- #text(size: 10.1pt)[*{headings["relevant_courses"]}* {self._sanitize(coursework)}]')
+            typ.append(f'#v(-3pt)')
+            typ.append(f'- #text(size: 9.8pt)[*{headings["relevant_courses"]}* {self._sanitize(coursework)}]')
+        if tcc:
+            typ.append(f'#v(-3pt)')
+            typ.append(f'- #text(size: 9.8pt)[*{headings["tcc_label"]}* {self._sanitize(tcc)}]')
         typ.append('')
 
         # Experience
@@ -172,17 +208,41 @@ class CVGenerator:
             typ.append(f'#grid(')
             typ.append(f'  columns: (1fr, auto),')
             typ.append(f'  align: (left, right),')
-            typ.append(f'  [ *{comp}* \\ #text(style: "italic", size: 10pt)[{role}] ],')
-            typ.append(f'  [ #text(size: 10pt)[{exp_period}] \\ #text(style: "italic", size: 9.4pt, fill: rgb("#64748b"))[{exp_loc}] ]')
+            typ.append(f'  [ *{comp}* \\ #text(style: "italic", size: 9.5pt)[{role}] ],')
+            typ.append(f'  [ #text(size: 9.5pt)[{exp_period}] \\ #text(style: "italic", size: 9pt, fill: rgb("#64748b"))[{exp_loc}] ]')
             typ.append(f')')
             typ.append(f'#v(-3.5pt)')
             for _, b_text in scored_bullets:
-                typ.append(f'- #text(size: 10.1pt)[{self._sanitize(b_text)}]')
+                typ.append(f'- #text(size: 9.8pt)[{self._sanitize(b_text)}]')
             if tech_stack:
                 typ.append(f'#v(-2.5pt)')
-                typ.append(f'#text(size: 9.6pt)[*{headings["tech_stack"]}* {", ".join(tech_stack)}]')
+                typ.append(f'#text(size: 9.2pt)[*{headings["tech_stack"]}* {", ".join(tech_stack)}]')
             typ.append(f'#v(1.5pt)')
         typ.append('')
+
+        # Leadership & Extracurricular Activities
+        if include_leadership and leadership:
+            typ.append(f'#section_heading("{headings["leadership"]}")')
+            for lead in leadership:
+                lead_name = lead.get("name", {}).get(lang, lead.get("name", "")) if isinstance(lead.get("name"), dict) else lead.get("name", "")
+                lead_role = lead.get("role", {}).get(lang, "")
+                lead_period = lead.get("period", {}).get(lang, lead.get("period", "")) if isinstance(lead.get("period"), dict) else lead.get("period", "")
+                lead_loc = lead.get("location", {}).get(lang, lead.get("location", "")) if isinstance(lead.get("location"), dict) else lead.get("location", "")
+                lead_bullets = lead.get("bullets", [])
+
+                typ.append(f'#grid(')
+                typ.append(f'  columns: (1fr, auto),')
+                typ.append(f'  align: (left, right),')
+                typ.append(f'  [ *{lead_name}* \\ #text(style: "italic", size: 9.5pt)[{lead_role}] ],')
+                typ.append(f'  [ #text(size: 9.5pt)[{lead_period}] \\ #text(style: "italic", size: 9pt, fill: rgb("#64748b"))[{lead_loc}] ]')
+                typ.append(f')')
+                typ.append(f'#v(-3.5pt)')
+                for lb in lead_bullets:
+                    lb_text = lb.get(lang, "")
+                    if lb_text:
+                        typ.append(f'- #text(size: 9.8pt)[{self._sanitize(lb_text)}]')
+                typ.append(f'#v(1.5pt)')
+            typ.append('')
 
         # Projects (with intelligent ranking, default_visible, and selection)
         typ.append(f'#section_heading("{headings["proj"]}")')
@@ -221,22 +281,23 @@ class CVGenerator:
             typ.append(f'#grid(')
             typ.append(f'  columns: (1fr, auto),')
             typ.append(f'  align: (left, right),')
-            typ.append(f'  [ {title_render} \\ #text(style: "italic", size: 10pt)[{prole}] ],')
-            typ.append(f'  [ #text(size: 10pt)[{pperiod}] ]')
+            typ.append(f'  [ {title_render} \\ #text(style: "italic", size: 9.5pt)[{prole}] ],')
+            typ.append(f'  [ #text(size: 9.5pt)[{pperiod}] ]')
             typ.append(f')')
             typ.append(f'#v(-3.5pt)')
             for pb in pbullets:
                 pb_text = pb.get(lang, "")
                 if pb_text:
-                    typ.append(f'- #text(size: 10.1pt)[{self._sanitize(pb_text)}]')
+                    typ.append(f'- #text(size: 9.8pt)[{self._sanitize(pb_text)}]')
             if ptech:
                 typ.append(f'#v(-2.5pt)')
-                typ.append(f'#text(size: 9.6pt)[*{headings["tech_stack"]}* {", ".join(ptech)}]')
+                typ.append(f'#text(size: 9.2pt)[*{headings["tech_stack"]}* {", ".join(ptech)}]')
             typ.append(f'#v(1.5pt)')
         typ.append('')
 
         # Skills
         typ.append(f'#section_heading("{headings["skills"]}")')
+        typ.append('#v(-2pt)')
         
         spoken_data = skills_data.get("languages_spoken", {}).get(lang, {})
         label_lang = "Idiomas:" if lang == "pt" else "Languages:"
@@ -246,50 +307,70 @@ class CVGenerator:
             curl = spoken_data.get("cert_url", "")
             extra = spoken_data.get("extra", "")
             cert_part = f'#ext_link("{curl}", [{cname}])' if curl else cname
-            typ.append(f'- #text(size: 10.1pt)[*{label_lang}* {stext} ({cert_part}) {extra}]')
+            typ.append(f'- #text(size: 9.6pt)[*{label_lang}* {stext} ({cert_part}) {extra}]')
         elif spoken_data:
-            typ.append(f'- #text(size: 10.1pt)[*{label_lang}* {self._sanitize(str(spoken_data))}]')
+            typ.append(f'- #text(size: 9.6pt)[*{label_lang}* {self._sanitize(str(spoken_data))}]')
 
-        langs = skills_data.get("languages", {}).get(lang, "")
-        if langs:
-            label = "Linguagens:" if lang == "pt" else "Programming Languages:"
-            typ.append(f'- #text(size: 10.1pt)[*{label}* {self._sanitize(langs)}]')
+        if preset == "trainee":
+            # Compact consolidated skills & certifications for 1-page Trainee CV
+            langs = skills_data.get("languages", {}).get(lang, "")
+            fw = skills_data.get("frameworks_tech", {}).get(lang, "")
+            practices = skills_data.get("practices", {}).get(lang, "")
+            devops = skills_data.get("technologies", {}).get(lang, "")
+            
+            label_stack = "Linguagens & Tecnologias:" if lang == "pt" else "Languages & Technologies:"
+            typ.append(f'- #text(size: 9.6pt)[*{label_stack}* C++, C\\#, Python (Avançado) | Go, TypeScript, Java (Intermediário) | SQL, .NET Core, Vue.js, Qt, Azure Functions, RabbitMQ, Docker, Git, xUnit]')
+            
+            label_prac = "Metodologias & Práticas:" if lang == "pt" else "Practices & Methodologies:"
+            typ.append(f'- #text(size: 9.6pt)[*{label_prac}* DDD, Clean Architecture, Clean Code, TDD, Testes de Mutação, CI/CD, Deep Learning]')
+            
+            if awards:
+                label_aw = "Certificados:" if lang == "pt" else "Certifications:"
+                aw_texts = []
+                for aw in awards:
+                    t = aw.get("text", "") if isinstance(aw, dict) else str(aw)
+                    aw_texts.append(self._sanitize(t))
+                typ.append(f'- #text(size: 9.6pt)[*{label_aw}* {" | ".join(aw_texts)}]')
+        else:
+            langs = skills_data.get("languages", {}).get(lang, "")
+            if langs:
+                label = "Linguagens:" if lang == "pt" else "Programming Languages:"
+                typ.append(f'- #text(size: 9.8pt)[*{label}* {self._sanitize(langs)}]')
 
-        fw = skills_data.get("frameworks_tech", {}).get(lang, "")
-        if fw:
-            label = "Tecnologias & Frameworks:" if lang == "pt" else "Technologies & Frameworks:"
-            typ.append(f'- #text(size: 10.1pt)[*{label}* {self._sanitize(fw)}]')
+            fw = skills_data.get("frameworks_tech", {}).get(lang, "")
+            if fw:
+                label = "Tecnologias & Frameworks:" if lang == "pt" else "Technologies & Frameworks:"
+                typ.append(f'- #text(size: 9.8pt)[*{label}* {self._sanitize(fw)}]')
 
-        db = skills_data.get("databases", {}).get(lang, "")
-        if db:
-            label = "Bancos de Dados:" if lang == "pt" else "Databases:"
-            typ.append(f'- #text(size: 10.1pt)[*{label}* {self._sanitize(db)}]')
+            db = skills_data.get("databases", {}).get(lang, "")
+            if db:
+                label = "Bancos de Dados:" if lang == "pt" else "Databases:"
+                typ.append(f'- #text(size: 9.8pt)[*{label}* {self._sanitize(db)}]')
 
-        practices = skills_data.get("practices", {}).get(lang, "")
-        if practices:
-            label = "Práticas & Metodologias:" if lang == "pt" else "Engineering Practices:"
-            typ.append(f'- #text(size: 10.1pt)[*{label}* {self._sanitize(practices)}]')
+            practices = skills_data.get("practices", {}).get(lang, "")
+            if practices:
+                label = "Práticas & Metodologias:" if lang == "pt" else "Engineering Practices:"
+                typ.append(f'- #text(size: 9.8pt)[*{label}* {self._sanitize(practices)}]')
 
-        devops = skills_data.get("technologies", {}).get(lang, "")
-        if devops:
-            label = "DevOps & Ferramentas:" if lang == "pt" else "DevOps & Tools:"
-            typ.append(f'- #text(size: 10.1pt)[*{label}* {self._sanitize(devops)}]')
+            devops = skills_data.get("technologies", {}).get(lang, "")
+            if devops:
+                label = "DevOps & Ferramentas:" if lang == "pt" else "DevOps & Tools:"
+                typ.append(f'- #text(size: 9.8pt)[*{label}* {self._sanitize(devops)}]')
 
-        typ.append('')
-
-        # Awards & Certifications
-        if awards:
-            typ.append(f'#section_heading("{headings["awards"]}")')
-            for aw in awards:
-                if isinstance(aw, dict):
-                    atext = self._sanitize(aw.get("text", ""))
-                    aurl = aw.get("url", "")
-                    if aurl:
-                        typ.append(f'- #text(size: 10.1pt)[#ext_link("{aurl}", [{atext}]) ]')
+            if awards:
+                typ.append('')
+                typ.append(f'#section_heading("{headings["awards"]}")')
+                typ.append('#v(-2pt)')
+                for aw in awards:
+                    if isinstance(aw, dict):
+                        atext = self._sanitize(aw.get("text", ""))
+                        aurl = aw.get("url", "")
+                        if aurl:
+                            typ.append(f'- #text(size: 9.8pt)[#ext_link("{aurl}", [{atext}]) ]')
+                        else:
+                            typ.append(f'- #text(size: 9.8pt)[{atext}]')
                     else:
-                        typ.append(f'- #text(size: 10.1pt)[{atext}]')
-                else:
-                    typ.append(f'- #text(size: 10.1pt)[{self._sanitize(str(aw))}]')
+                        typ.append(f'- #text(size: 9.8pt)[{self._sanitize(str(aw))}]')
 
         return "\n".join(typ)
 
@@ -314,3 +395,4 @@ class CVGenerator:
         finally:
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
+

@@ -23,16 +23,18 @@ def sync_to_portfolio(portfolio_path: str, pt_pdf: str, en_pdf: str):
 def cmd_generate(args):
     gen = CVGenerator(args.profile)
     
+    include_leadership = False if args.no_leadership else (True if args.leadership else None)
+    
     if args.all:
         out_pt = args.output_pt or "output/CV_portugues.pdf"
         out_en = args.output_en or "output/CV_english.pdf"
         
-        ok_pt = gen.compile(gen.render_typst(lang="pt"), out_pt)
-        ok_en = gen.compile(gen.render_typst(lang="en"), out_en)
+        ok_pt = gen.compile(gen.render_typst(lang="pt", preset=args.preset, include_leadership=include_leadership), out_pt)
+        ok_en = gen.compile(gen.render_typst(lang="en", preset=args.preset, include_leadership=include_leadership), out_en)
         
         if ok_pt and ok_en:
-            print(f"[SUCCESS] Portuguese CV generated: {out_pt}")
-            print(f"[SUCCESS] English CV generated: {out_en}")
+            print(f"[SUCCESS] Portuguese CV generated: {out_pt} (Preset: {args.preset})")
+            print(f"[SUCCESS] English CV generated: {out_en} (Preset: {args.preset})")
             if args.sync or args.portfolio:
                 sync_to_portfolio(args.portfolio, out_pt, out_en)
         else:
@@ -42,21 +44,23 @@ def cmd_generate(args):
 
     typ_source = gen.render_typst(
         lang=args.lang,
+        preset=args.preset,
         max_bullets_per_exp=args.max_bullets,
         selected_project_ids=args.projects.split(",") if args.projects else None,
         selected_bullet_ids=args.bullets.split(",") if args.bullets else None,
+        include_leadership=include_leadership,
     )
     default_name = "CV_portugues.pdf" if args.lang == "pt" else "CV_english.pdf"
     output_pdf = args.output or f"output/{default_name}"
     
     success = gen.compile(typ_source, output_pdf)
     if success:
-        print(f"[SUCCESS] CV generated: {output_pdf}")
+        print(f"[SUCCESS] CV generated: {output_pdf} (Preset: {args.preset})")
         if args.sync or args.portfolio:
             other_lang = "en" if args.lang == "pt" else "pt"
             other_name = "CV_english.pdf" if args.lang == "pt" else "CV_portugues.pdf"
             out_other = f"output/{other_name}"
-            gen.compile(gen.render_typst(lang=other_lang), out_other)
+            gen.compile(gen.render_typst(lang=other_lang, preset=args.preset, include_leadership=include_leadership), out_other)
             sync_to_portfolio(
                 args.portfolio,
                 output_pdf if args.lang == "pt" else out_other,
@@ -90,13 +94,16 @@ def cmd_tailor(args):
 
     selected_projs = args.projects.split(",") if args.projects else None
     selected_bullets = args.bullets.split(",") if args.bullets else None
+    include_leadership = False if args.no_leadership else (True if args.leadership else None)
 
     typ_source = gen.render_typst(
         lang=args.lang,
+        preset=args.preset,
         jd_keywords=set(ats_report["matched_keywords"]),
         max_bullets_per_exp=args.max_bullets,
         selected_project_ids=selected_projs,
         selected_bullet_ids=selected_bullets,
+        include_leadership=include_leadership,
     )
     
     success = gen.compile(typ_source, output_pdf)
@@ -133,7 +140,8 @@ def cmd_score(args):
     print(f"Match Score: {ats_report['match_score']}%")
     print(f"Matched Keywords ({len(ats_report['matched_keywords'])}): {', '.join(ats_report['matched_keywords'])}")
     print(f"Missing Keywords ({len(ats_report['missing_keywords'])}): {', '.join(ats_report['missing_keywords']) if ats_report['missing_keywords'] else 'None'}")
-    print(f"=======================================================\n")
+    print(f"=======================================================")
+    print(f"\n")
 
 def main():
     parser = argparse.ArgumentParser(description="AutoCV: Automated ATS-friendly CV Generator & Tailoring Tool")
@@ -141,25 +149,31 @@ def main():
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     # Generate
-    p_gen = subparsers.add_parser("generate", help="Generate standard CV in PT or EN")
+    p_gen = subparsers.add_parser("generate", help="Generate CV in PT or EN")
+    p_gen.add_argument("--preset", choices=["tech", "trainee", "full"], default="tech", help="CV Preset/Mode (default: tech)")
     p_gen.add_argument("--lang", choices=["pt", "en"], default="pt", help="Language for the CV (default: pt)")
     p_gen.add_argument("--all", action="store_true", help="Generate both PT and EN CVs at once")
     p_gen.add_argument("--output", "-o", help="Custom output PDF path")
     p_gen.add_argument("--output-pt", help="Custom output path for PT CV when --all is set")
     p_gen.add_argument("--output-en", help="Custom output path for EN CV when --all is set")
     p_gen.add_argument("--max-bullets", type=int, help="Maximum number of bullet points per experience")
-    p_gen.add_argument("--projects", help="Comma-separated list of project IDs to include (e.g. goblin,wiredpanda)")
+    p_gen.add_argument("--leadership", action="store_true", help="Explicitly force inclusion of leadership section")
+    p_gen.add_argument("--no-leadership", action="store_true", help="Explicitly exclude leadership section")
+    p_gen.add_argument("--projects", help="Comma-separated list of project IDs to include (e.g. wiredpanda,goblin)")
     p_gen.add_argument("--bullets", help="Comma-separated list of bullet IDs to include")
     p_gen.add_argument("--sync", action="store_true", help="Sync compiled PDFs directly to local portfolio repository")
     p_gen.add_argument("--portfolio", default="~/Repos/joao-zip.github.io", help="Path to portfolio repo directory")
 
     # Tailor
     p_tailor = subparsers.add_parser("tailor", help="Tailor CV to a specific Job Description")
+    p_tailor.add_argument("--preset", choices=["tech", "trainee", "full"], default="tech", help="CV Preset/Mode (default: tech)")
     p_tailor.add_argument("--jd", help="Path to job description file or raw JD text")
     p_tailor.add_argument("--jd-text", help="Raw job description text string")
     p_tailor.add_argument("--lang", choices=["pt", "en"], default="en", help="Language for the CV (default: en)")
     p_tailor.add_argument("--company", "-c", help="Company name (for file naming and tagging)")
     p_tailor.add_argument("--max-bullets", type=int, help="Maximum number of bullet points per experience")
+    p_tailor.add_argument("--leadership", action="store_true", help="Explicitly force inclusion of leadership section")
+    p_tailor.add_argument("--no-leadership", action="store_true", help="Explicitly exclude leadership section")
     p_tailor.add_argument("--projects", help="Comma-separated list of project IDs to include")
     p_tailor.add_argument("--bullets", help="Comma-separated list of bullet IDs to include")
     p_tailor.add_argument("--output", "-o", help="Custom output PDF path")
