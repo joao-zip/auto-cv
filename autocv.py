@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 from src.generator import CVGenerator
 from src.ats_analyzer import analyze_job_description, extract_keywords_from_text
+from src.validator import validate_profile_file
 
 def sync_to_portfolio(portfolio_path: str, pt_pdf: str, en_pdf: str):
     p_path = Path(portfolio_path).expanduser().resolve()
@@ -143,10 +144,23 @@ def cmd_score(args):
     print(f"=======================================================")
     print(f"\n")
 
+def cmd_validate(args):
+    valid, errors = validate_profile_file(args.profile)
+    if valid:
+        print(f"[SUCCESS] Profile '{args.profile}' is valid and ready for generation.")
+    else:
+        print(f"[ERROR] Found {len(errors)} validation error(s) in '{args.profile}':")
+        for err in errors:
+            print(f"  - {err}")
+        sys.exit(1)
+
 def main():
     parser = argparse.ArgumentParser(description="AutoCV: Automated ATS-friendly CV Generator & Tailoring Tool")
     parser.add_argument("--profile", default="data/profile.yaml", help="Path to profile.yaml data file")
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # Validate
+    subparsers.add_parser("validate", help="Validate profile.yaml schema integrity and bilingual parity")
 
     # Generate
     p_gen = subparsers.add_parser("generate", help="Generate CV in PT or EN")
@@ -183,7 +197,9 @@ def main():
     p_score.add_argument("--jd", required=True, help="Path to job description file or raw text")
 
     args = parser.parse_args()
-    if args.command == "generate":
+    if args.command == "validate":
+        cmd_validate(args)
+    elif args.command == "generate":
         cmd_generate(args)
     elif args.command == "tailor":
         cmd_tailor(args)
